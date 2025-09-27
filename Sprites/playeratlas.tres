@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://b3sfvc6vkpc1a"]
+
+[ext_resource type="Texture2D" uid="uid://chpqi3stohoth" path="res://Sprites/witchrunanims.png" id="1_guiof"]
+
+[resource]
+atlas = ExtResource("1_guiof")
+region = Rect2(67, 4, 25, 35)
