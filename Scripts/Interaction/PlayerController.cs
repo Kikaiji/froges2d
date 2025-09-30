@@ -15,6 +15,12 @@ public partial class PlayerController : CharacterBody2D
 	
 	private Vector2 _lastDirectionFaced;
 	
+	private AnimatedSprite2D _sprite;
+	
+	public override void _Ready(){
+		_sprite = GetChild(2) as AnimatedSprite2D;
+	}
+	
 	public override void _PhysicsProcess(double delta){
 		
 		if(Velocity == Vector2.Zero){
@@ -44,6 +50,19 @@ public partial class PlayerController : CharacterBody2D
 		if (Input.IsActionPressed("control_right")) result.X += 1f; 
 		
 		result = result.Normalized() * ((float)(_moveSpeed * delta));
+		
+		if(result.X >= 0){
+			_sprite.FlipH = true;
+		} else{
+			_sprite.FlipH = false;
+		}
+		
+		if(result.IsEqualApprox(Vector2.Zero)){
+			_sprite.Pause();
+			_sprite.Frame = 0;
+		} else{
+			_sprite.Play();
+		}
 		
 		return result;
 	}
