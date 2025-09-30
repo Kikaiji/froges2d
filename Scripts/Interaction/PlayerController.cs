@@ -28,8 +28,8 @@ public partial class PlayerController : CharacterBody2D
 	}
 	
 	public override void _Process(double delta){
-		if (Input.IsActionPressed("control_attack")) PlayerAttack();
-		if (Input.IsActionPressed("control_swap")) PlayerSwitchFrogs();
+		if (Input.IsActionJustPressed("control_attack")) PlayerAttack();
+		if (Input.IsActionJustPressed("control_swap")) PlayerSwitchFrogs();
 	}
 	
 	
@@ -38,10 +38,12 @@ public partial class PlayerController : CharacterBody2D
 		
 		Vector2 result = Vector2.Zero;
 		
-		if (Input.IsActionPressed("control_up")) result.Y -= (float)(_moveSpeed * delta);
-		if (Input.IsActionPressed("control_down")) result.Y += (float)(_moveSpeed * delta);
-		if (Input.IsActionPressed("control_left")) result.X -= (float)(_moveSpeed * delta);
-		if (Input.IsActionPressed("control_right")) result.X += (float)(_moveSpeed * delta); 
+		if (Input.IsActionPressed("control_up")) result.Y -= 1f;
+		if (Input.IsActionPressed("control_down")) result.Y += 1f;
+		if (Input.IsActionPressed("control_left")) result.X -= 1f;
+		if (Input.IsActionPressed("control_right")) result.X += 1f; 
+		
+		result = result.Normalized() * ((float)(_moveSpeed * delta));
 		
 		return result;
 	}
@@ -51,7 +53,7 @@ public partial class PlayerController : CharacterBody2D
 	}
 	
 	private void PlayerSwitchFrogs(){
-		
+		PlayerData.Instance.SwapFrogs();
 	}
 	
 	

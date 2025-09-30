@@ -39,31 +39,65 @@ public class PlayerData
 	public static event StatModified currentHealthChanged;
 	public static event StatModified maxHealthChanged;
 	
+	public void AddFrogWeaponToPlayer(FrogWeapon newFrog){
+		if(_mainFrog == null || (_mainFrog != null && _sideFrog != null)){
+			ChangeMainFrog(newFrog);
+			return;
+		}
+		
+		ChangeSideFrog(newFrog);
+		SwapFrogs();
+	}
+	
 	public void ChangeMainFrog(FrogWeapon newFrog){
 		_mainFrog = newFrog;
+		_mainCurrentAmmo = _mainFrog.frogMaxAmmo;
 		
-		if(mainFrogChanged != null){
+		if(mainFrogChanged != null && mainAmmoChanged != null){
 			mainFrogChanged.Invoke(_mainFrog);
+			mainAmmoChanged.Invoke(_mainFrog.frogMaxAmmo);
 		}
+	}
+	
+	public void RemoveMainFrog(){
+		_mainFrog = null;
+		_mainCurrentAmmo = 0;
+		
+		SwapFrogs();
 	}
 	
 	public void ChangeSideFrog(FrogWeapon newFrog){
 		_sideFrog = newFrog;
+		_sideCurrentAmmo = _sideFrog.frogMaxAmmo;
 		
-		if(sideFrogChanged != null){
+		if(sideFrogChanged != null && sideAmmoChanged != null){
 			sideFrogChanged.Invoke(_sideFrog);
+			sideAmmoChanged.Invoke(_sideFrog.frogMaxAmmo);
 		}
 	}
 	
-	public void SwitchFrog(){
-		(_mainFrog, _sideFrog) = (_sideFrog, _mainFrog);
+	public void RemoveSideFrog(){
+		_sideFrog = null;
+		_sideCurrentAmmo = 0;
 		
-		if(mainFrogChanged != null){
+		if(sideFrogChanged != null && sideAmmoChanged != null){
+			sideFrogChanged.Invoke(_sideFrog);
+			sideAmmoChanged.Invoke(_sideCurrentAmmo);
+		}
+	}
+	
+	public void SwapFrogs(){
+		(_mainFrog, _sideFrog) = (_sideFrog, _mainFrog);
+		(_mainCurrentAmmo, _sideCurrentAmmo) = (_sideCurrentAmmo, _mainCurrentAmmo);
+		
+		if(mainFrogChanged != null && mainAmmoChanged != null){
 			mainFrogChanged.Invoke(_mainFrog);
+			mainAmmoChanged.Invoke(_mainCurrentAmmo);
 		}
 		
-		if(sideFrogChanged != null){
+		if(sideFrogChanged != null && sideAmmoChanged != null){
 			sideFrogChanged.Invoke(_sideFrog);
+			sideAmmoChanged.Invoke(_sideCurrentAmmo);
 		}
 	}
 	

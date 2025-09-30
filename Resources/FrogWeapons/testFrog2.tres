@@ -1,0 +1,12 @@
+[gd_resource type="Resource" load_steps=3 format=3 uid="uid://dryk722wi2q6"]
+
+[ext_resource type="Texture2D" uid="uid://vu2p62xfwloh" path="res://Sprites/Temp Sprites/pexels-photo-5002900.jpeg" id="1_okv4r"]
+[ext_resource type="Script" uid="uid://cromv2ykpkvsn" path="res://Scripts/Game/Weapons/Frogs/FrogWeapon.cs" id="2_0hdiw"]
+
+[resource]
+script = ExtResource("2_0hdiw")
+frogName = "Test Frog 2"
+frogType = 1
+frogId = "testFrog2"
+frogMaxAmmo = 10
+frogIcon = ExtResource("1_okv4r")

@@ -11,6 +11,15 @@ public partial class AmmoDisplay : Control
 		_maxAmmoDisplay = GetChild(2) as Label;
 	}
 	
+	protected void LoadNewFrog(FrogWeapon newFrog){
+		if(newFrog == null){
+			_maxAmmoDisplay.Text = "0";
+			SetCurrentAmmoDisplay(0);
+			return;
+		}
+		_maxAmmoDisplay.Text = newFrog.frogMaxAmmo.ToString();
+	}
+	
 	protected void SetCurrentAmmoDisplay(int count){
 		_currentAmmoDisplay.Text = count.ToString();
 	}

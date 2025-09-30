@@ -1,15 +1,13 @@
 using Godot;
 using System;
 
-public partial class SubAmmoDisplay : AmmoDisplay
+public partial class SubWeaponPanel : WeaponPanel
 {
 	public override void _EnterTree(){
-		PlayerData.sideAmmoChanged += SetCurrentAmmoDisplay;
 		PlayerData.sideFrogChanged += LoadNewFrog;
 	}
 	
 	public override void _ExitTree(){
-		PlayerData.sideAmmoChanged -= SetCurrentAmmoDisplay;
 		PlayerData.sideFrogChanged -= LoadNewFrog;
 	}
 }

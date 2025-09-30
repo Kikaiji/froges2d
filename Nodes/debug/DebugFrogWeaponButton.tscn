@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://cj88l32qoptmk"]
+
+[ext_resource type="Script" uid="uid://dkih0v5i8lyat" path="res://Scripts/debug/DebugGiveFrog.cs" id="1_yixdx"]
+[ext_resource type="Texture2D" uid="uid://ck0pdenklkluc" path="res://Sprites/Temp Sprites/frog.jpg" id="2_ll3tm"]
+
+[node name="frog weapon" type="Panel"]
+custom_minimum_size = Vector2(70, 70)
+size_flags_horizontal = 4
+size_flags_vertical = 6
+script = ExtResource("1_yixdx")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "frog :)"
+icon = ExtResource("2_ll3tm")
+icon_alignment = 1
+expand_icon = true
+
+[connection signal="button_down" from="Button" to="." method="GiveFrogWeapon"]
