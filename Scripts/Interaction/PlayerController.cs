@@ -17,6 +17,8 @@ public partial class PlayerController : CharacterBody2D
 	public Vector2 TrueMovementDir = Vector2.Zero;
 	private Vector2 _lastDirectionFaced;
 	
+	public Vector2 MousePosRelativeToPlayer;
+	
 	private AnimatedSprite2D _sprite;
 	
 	public override void _Ready(){
@@ -37,6 +39,8 @@ public partial class PlayerController : CharacterBody2D
 	public override void _Process(double delta){
 		if (Input.IsActionJustPressed("control_attack")) PlayerAttack();
 		if (Input.IsActionJustPressed("control_swap")) PlayerSwitchFrogs();
+		
+		MousePosRelativeToPlayer = GetGlobalMousePosition() - this.GlobalPosition;
 	}
 	
 	
@@ -55,10 +59,16 @@ public partial class PlayerController : CharacterBody2D
 		TrueMovementDir = result;
 		result = result.Normalized() * ((float)(_moveSpeed * delta));
 		
-		if(result.X >= 0){
+		if(MousePosRelativeToPlayer.X > 0){
 			_sprite.FlipH = false;
-		} else{
+		} else if (MousePosRelativeToPlayer.X < 0){
 			_sprite.FlipH = true;
+		}
+		
+		if(Mathf.Sign(MousePosRelativeToPlayer.X) == Mathf.Sign(TrueMovementDir.X)){
+			_sprite.SpeedScale = -1f;
+		} else {
+			_sprite.SpeedScale = 1f;
 		}
 		
 		if(result.IsEqualApprox(Vector2.Zero)){
@@ -80,7 +90,7 @@ public partial class PlayerController : CharacterBody2D
 	}
 	
 	private void PlayerAttack(){
-		
+		PlayerData.Instance.PlayerAttacked(GetGlobalMousePosition());
 	}
 	
 	private void PlayerSwitchFrogs(){

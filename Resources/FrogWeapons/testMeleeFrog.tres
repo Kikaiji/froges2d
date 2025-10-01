@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://sql0knkcfx3b"]
+
+[ext_resource type="Script" uid="uid://dai40c1qigx7l" path="res://Scripts/Game/Weapons/Frogs/Resources/FrogWeaponMelee.cs" id="1_p7uk3"]
+[ext_resource type="Texture2D" uid="uid://dhh84gm02gikx" path="res://Sprites/Bought Assets/placeholder weapon.tres" id="1_ssau5"]
+[ext_resource type="Texture2D" uid="uid://vu2p62xfwloh" path="res://Sprites/Temp Sprites/pexels-photo-5002900.jpeg" id="2_2rwpv"]
+
+[resource]
+script = ExtResource("1_p7uk3")
+frogName = "Melee Frog"
+frogType = 3
+frogId = "meleeFrog"
+frogIcon = ExtResource("2_2rwpv")
+frogHoldSprite = ExtResource("1_ssau5")

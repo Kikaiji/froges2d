@@ -11,6 +11,15 @@ public class PlayerData
 		set => _instance = value;
 	}
 	
+	public delegate void PlayerAttackEvents(FrogWeapon attackingWeapon, Vector2 mousePosition);
+	public static event PlayerAttackEvents playerJustAttacked;
+	
+	public void PlayerAttacked(Vector2 mousePosition){
+		if(playerJustAttacked != null){
+			playerJustAttacked.Invoke(_mainFrog, mousePosition);
+		}
+	}
+	
 	public delegate void PlayerMovementEvents();
 	public static event PlayerMovementEvents playerStartMoving;
 	public static event PlayerMovementEvents playerStopMoving;

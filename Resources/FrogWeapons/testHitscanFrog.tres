@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://ej4l806eot1h"]
+
+[ext_resource type="Texture2D" uid="uid://btlh6p18eile" path="res://Sprites/Temp Sprites/textfroggyweaponhold1.tres" id="1_qkfvt"]
+[ext_resource type="Texture2D" uid="uid://ck0pdenklkluc" path="res://Sprites/Temp Sprites/frog.jpg" id="2_2mfit"]
+[ext_resource type="Script" uid="uid://d2vdtc1mkehi7" path="res://Scripts/Game/Weapons/Frogs/Resources/FrogWeaponHitScan.cs" id="3_42jk5"]
+
+[resource]
+script = ExtResource("3_42jk5")
+frogBaseFireRate = 1.0
+frogBaseDamage = 1.0
+frogHitScanRange = 50.0
+frogName = "Hitscan Frog"
+frogId = "hitscanFrog"
+frogMaxAmmo = 5
+frogIcon = ExtResource("2_2mfit")
+frogHoldSprite = ExtResource("1_qkfvt")

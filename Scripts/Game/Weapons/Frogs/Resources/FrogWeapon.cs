@@ -7,14 +7,14 @@ public partial class FrogWeapon : Resource
 	[Export] public WeaponType frogType;
 	[Export] public string frogId;
 	[Export] public int frogMaxAmmo;
-	[Export] public CompressedTexture2D frogIcon;
-	
+	[Export] public Texture2D frogIcon;
+	[Export] public Texture2D frogHoldSprite;
 }
 
 
 public enum WeaponType
 {
-	Hitscan,
+	HitScan,
 	Projectile,
 	Turret,
 	Melee	

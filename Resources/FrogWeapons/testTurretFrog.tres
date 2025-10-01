@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://cogmuxk5d28cr"]
+
+[ext_resource type="Texture2D" uid="uid://b6fjls0o0qn0b" path="res://Sprites/Temp Sprites/testProjectile.tres" id="1_ifjfs"]
+[ext_resource type="Texture2D" uid="uid://ck0pdenklkluc" path="res://Sprites/Temp Sprites/frog.jpg" id="2_3ihud"]
+[ext_resource type="Script" uid="uid://ct5bwo8xml1jb" path="res://Scripts/Game/Weapons/Frogs/Resources/FrogWeaponTurret.cs" id="3_gs1f8"]
+
+[resource]
+script = ExtResource("3_gs1f8")
+frogName = "Turret Frog"
+frogType = 2
+frogId = "turretFrog"
+frogMaxAmmo = 3
+frogIcon = ExtResource("2_3ihud")
+frogHoldSprite = ExtResource("1_ifjfs")
