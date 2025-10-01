@@ -11,6 +11,18 @@ public class PlayerData
 		set => _instance = value;
 	}
 	
+	public delegate void PlayerMovementEvents();
+	public static event PlayerMovementEvents playerStartMoving;
+	public static event PlayerMovementEvents playerStopMoving;
+	
+	public void PlayerStartedMoving(){
+		playerStartMoving?.Invoke();
+	}
+	
+	public void PlayerStoppedMoving(){
+		playerStopMoving?.Invoke();
+	}
+	
 	public delegate void FrogModified(FrogWeapon newWeapon);
 	public static event FrogModified sideFrogChanged;
 	public static event FrogModified mainFrogChanged;

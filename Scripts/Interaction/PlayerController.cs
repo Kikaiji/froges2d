@@ -13,6 +13,8 @@ public partial class PlayerController : CharacterBody2D
 	[Export]
 	private double _accelerationSpeed = 200;
 	
+	private Vector2 _previousMoveInput = Vector2.Zero;
+	public Vector2 TrueMovementDir = Vector2.Zero;
 	private Vector2 _lastDirectionFaced;
 	
 	private AnimatedSprite2D _sprite;
@@ -22,7 +24,6 @@ public partial class PlayerController : CharacterBody2D
 	}
 	
 	public override void _PhysicsProcess(double delta){
-		
 		if(Velocity == Vector2.Zero){
 			Velocity = ProcessMovementInputs(delta);
 		}
@@ -43,27 +44,38 @@ public partial class PlayerController : CharacterBody2D
 	public Vector2 ProcessMovementInputs(double delta){
 		
 		Vector2 result = Vector2.Zero;
+		Vector2 curMoveInput;
 		
 		if (Input.IsActionPressed("control_up")) result.Y -= 1f;
 		if (Input.IsActionPressed("control_down")) result.Y += 1f;
 		if (Input.IsActionPressed("control_left")) result.X -= 1f;
 		if (Input.IsActionPressed("control_right")) result.X += 1f; 
 		
+		curMoveInput = result;
+		TrueMovementDir = result;
 		result = result.Normalized() * ((float)(_moveSpeed * delta));
 		
 		if(result.X >= 0){
-			_sprite.FlipH = true;
-		} else{
 			_sprite.FlipH = false;
+		} else{
+			_sprite.FlipH = true;
 		}
 		
 		if(result.IsEqualApprox(Vector2.Zero)){
-			_sprite.Pause();
+			_sprite.Play("forgy idle");
 			_sprite.Frame = 0;
+			
+			if(!_previousMoveInput.IsEqualApprox(Vector2.Zero)){
+				PlayerData.Instance.PlayerStoppedMoving();
+			}
 		} else{
-			_sprite.Play();
+			if(_previousMoveInput.IsEqualApprox(Vector2.Zero)){
+				PlayerData.Instance.PlayerStartedMoving();
+			}
+			_sprite.Play("forgy walk");
 		}
 		
+		_previousMoveInput = curMoveInput;
 		return result;
 	}
 	

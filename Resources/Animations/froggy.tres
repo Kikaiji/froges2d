@@ -1,6 +1,7 @@
-[gd_resource type="SpriteFrames" load_steps=12 format=3 uid="uid://6tovx7whgyck"]
+[gd_resource type="SpriteFrames" load_steps=20 format=3 uid="uid://6tovx7whgyck"]
 
 [ext_resource type="Texture2D" uid="uid://ekpt3cfs3ewq" path="res://Sprites/Temp Sprites/froge.png" id="1_01qlm"]
+[ext_resource type="Texture2D" uid="uid://c0e2imrj2ahr6" path="res://Sprites/Temp Sprites/forgee 2.png" id="2_nta1l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nta1l"]
 atlas = ExtResource("1_01qlm")
@@ -42,6 +43,34 @@ region = Rect2(256, 0, 32, 32)
 atlas = ExtResource("1_01qlm")
 region = Rect2(288, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1b6ow"]
+atlas = ExtResource("2_nta1l")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2g4oi"]
+atlas = ExtResource("2_nta1l")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tnkpf"]
+atlas = ExtResource("2_nta1l")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lj2r2"]
+atlas = ExtResource("2_nta1l")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dngdj"]
+atlas = ExtResource("2_nta1l")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uhawb"]
+atlas = ExtResource("2_nta1l")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_776rn"]
+atlas = ExtResource("2_nta1l")
+region = Rect2(192, 0, 32, 32)
+
 [resource]
 animations = [{
 "frames": [{
@@ -77,5 +106,36 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1b6ow")
+}],
+"loop": true,
+"name": &"forgy idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2g4oi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tnkpf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lj2r2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dngdj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uhawb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_776rn")
+}],
+"loop": true,
+"name": &"forgy walk",
 "speed": 12.0
 }]
