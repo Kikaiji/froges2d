@@ -77,15 +77,13 @@ public partial class PlayerParticles : Node2D
 		var dir = MathF.Sign(PlayerBody.TrueMovementDir.X);
 		
 		if(dir == 0) return;
-		
-		if(dir != _playerFacingX){
 			if(dir == 1f){
 				FlipParticlesRight();
 			} else
 			{
 				FlipParticlesLeft();
 			}
-		}
+		
 	}
 	
 	private void DustCloudParticleStart(){

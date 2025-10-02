@@ -6,11 +6,14 @@
 
 [resource]
 script = ExtResource("3_42jk5")
-frogBaseFireRate = 1.0
+frogBaseFireRate = 0.5
 frogBaseDamage = 1.0
 frogHitScanRange = 50.0
+frogHitScanLineWidth = 1.0
+frogHitScanPierceCount = 1
 frogName = "Hitscan Frog"
 frogId = "hitscanFrog"
 frogMaxAmmo = 5
 frogIcon = ExtResource("2_2mfit")
 frogHoldSprite = ExtResource("1_qkfvt")
+frogBarrelDistance = 5.0

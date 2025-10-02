@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://cdes7tkcjernu"]
+[gd_scene load_steps=29 format=4 uid="uid://cdes7tkcjernu"]
 
 [ext_resource type="Texture2D" uid="uid://b3sfvc6vkpc1a" path="res://Sprites/playeratlas.tres" id="1_ipu5k"]
 [ext_resource type="Script" uid="uid://hgskuehulatj" path="res://Scripts/Interaction/PlayerController.cs" id="1_pyui1"]
@@ -13,12 +13,14 @@
 [ext_resource type="Script" uid="uid://wrwnkhyb71aj" path="res://Scripts/UI/MainWeaponPanel.cs" id="6_71tk8"]
 [ext_resource type="Script" uid="uid://cv6abt0275rts" path="res://Scripts/Game/Player/PlayerAttacker.cs" id="7_vy0jd"]
 [ext_resource type="PackedScene" uid="uid://cj88l32qoptmk" path="res://Nodes/debug/DebugFrogWeaponButton.tscn" id="8_71tk8"]
+[ext_resource type="PackedScene" uid="uid://d0tqxx5kguxyp" path="res://Nodes/Weapons/hit_scan_line_prefab.tscn" id="8_cjfoa"]
 [ext_resource type="Script" uid="uid://chjlkkqyhtp4p" path="res://Scripts/debug/DebugFrogPanel.cs" id="8_gdkmg"]
 [ext_resource type="Script" uid="uid://o7d7vvbr70d2" path="res://Scripts/debug/DebugRemoveFrog.cs" id="10_bsx07"]
 [ext_resource type="Script" uid="uid://cwqms8es76ns3" path="res://Scripts/Game/Camera/CameraFollow.cs" id="11_taw7x"]
 [ext_resource type="TileSet" uid="uid://eqbvbpeyu5ao" path="res://Resources/TileMaps/debug tileset.tres" id="12_lvp6j"]
 [ext_resource type="Texture2D" uid="uid://dl85mtmlyvirt" path="res://Sprites/Bought Assets/Assets 2(Scale x1)-No-BG.png" id="18_jgnfu"]
 [ext_resource type="Texture2D" uid="uid://rvuogtmu7rur" path="res://Sprites/Temp Sprites/test dummy.tres" id="18_vy0jd"]
+[ext_resource type="PackedScene" uid="uid://day3shxjg5d6f" path="res://Nodes/Weapons/projectile_prefab.tscn" id="20_pv5k4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o073o"]
 radius = 2.0
@@ -121,6 +123,8 @@ script = ExtResource("7_vy0jd")
 PlayerBody = NodePath("..")
 WeaponSprite = NodePath("WeaponSprite")
 HitScanRay = NodePath("../HitScan Ray")
+HitScanLine = ExtResource("8_cjfoa")
+ProjectilePrefab = ExtResource("20_pv5k4")
 
 [node name="WeaponSprite" type="Sprite2D" parent="CharacterBody2D/Weapon"]
 texture_filter = 1
@@ -381,6 +385,42 @@ shape = SubResource("RectangleShape2D_pv5k4")
 scale = Vector2(0.3, 0.3)
 texture = SubResource("AtlasTexture_cjfoa")
 
+[node name="Test Obstacle2" type="StaticBody2D" parent="."]
+position = Vector2(29, 29)
+collision_layer = 4
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Test Obstacle2"]
+shape = SubResource("RectangleShape2D_pv5k4")
+
+[node name="Sprite2D" type="Sprite2D" parent="Test Obstacle2"]
+scale = Vector2(0.3, 0.3)
+texture = SubResource("AtlasTexture_cjfoa")
+
+[node name="Test Obstacle3" type="StaticBody2D" parent="."]
+position = Vector2(44, 29)
+collision_layer = 4
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Test Obstacle3"]
+shape = SubResource("RectangleShape2D_pv5k4")
+
+[node name="Sprite2D" type="Sprite2D" parent="Test Obstacle3"]
+scale = Vector2(0.3, 0.3)
+texture = SubResource("AtlasTexture_cjfoa")
+
+[node name="Test Obstacle4" type="StaticBody2D" parent="."]
+position = Vector2(35, 13)
+collision_layer = 4
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Test Obstacle4"]
+shape = SubResource("RectangleShape2D_pv5k4")
+
+[node name="Sprite2D" type="Sprite2D" parent="Test Obstacle4"]
+scale = Vector2(0.3, 0.3)
+texture = SubResource("AtlasTexture_cjfoa")
+
 [node name="Test Dummy" type="RigidBody2D" parent="."]
 position = Vector2(49, -23)
 collision_layer = 2
@@ -394,6 +434,9 @@ shape = SubResource("CircleShape2D_jgnfu")
 texture_filter = 1
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("18_vy0jd")
+
+[node name="Projectile Prefab" parent="." instance=ExtResource("20_pv5k4")]
+position = Vector2(-39, -28)
 
 [connection signal="button_down" from="CanvasLayer/UI Display/Debug Panel/DebugRemoveFrogs/Remove Main" to="CanvasLayer/UI Display/Debug Panel/DebugRemoveFrogs" method="RemoveMainFrog"]
 [connection signal="button_down" from="CanvasLayer/UI Display/Debug Panel/DebugRemoveFrogs/Remove Side" to="CanvasLayer/UI Display/Debug Panel/DebugRemoveFrogs" method="RemoveSideFrog"]

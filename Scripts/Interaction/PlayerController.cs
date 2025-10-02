@@ -37,7 +37,9 @@ public partial class PlayerController : CharacterBody2D
 	}
 	
 	public override void _Process(double delta){
-		if (Input.IsActionJustPressed("control_attack")) PlayerAttack();
+		if (Input.IsActionJustPressed("control_attack")) PlayerStartAttack();
+		if (Input.IsActionJustReleased("control_attack")) PlayerStopAttack();
+		
 		if (Input.IsActionJustPressed("control_swap")) PlayerSwitchFrogs();
 		
 		MousePosRelativeToPlayer = GetGlobalMousePosition() - this.GlobalPosition;
@@ -89,8 +91,12 @@ public partial class PlayerController : CharacterBody2D
 		return result;
 	}
 	
-	private void PlayerAttack(){
-		PlayerData.Instance.PlayerAttacked(GetGlobalMousePosition());
+	private void PlayerStartAttack(){
+		PlayerData.Instance.PlayerStartAttack(GetGlobalMousePosition());
+	}
+	
+	private void PlayerStopAttack(){
+		PlayerData.Instance.PlayerStopAttack(GetGlobalMousePosition());
 	}
 	
 	private void PlayerSwitchFrogs(){

@@ -10,4 +10,6 @@ public partial class Projectile : Resource
 	[Export] public Shape2D projectileCollisionShape;
 	[Export] public Texture2D projectileSprite;
 	[Export] public float projectileLifeTime;
+	
+	[Export] public int projectileBounceCount;
 }

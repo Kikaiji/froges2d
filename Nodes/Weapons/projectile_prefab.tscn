@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://day3shxjg5d6f"]
+
+[ext_resource type="Script" uid="uid://btgtas56rtwvs" path="res://Scripts/Game/Weapons/Projectiles/ProjectileObject.cs" id="1_glan8"]
+[ext_resource type="Texture2D" uid="uid://b6fjls0o0qn0b" path="res://Sprites/Temp Sprites/testProjectile.tres" id="2_2pepr"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_glan8"]
+friction = 0.0
+bounce = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cjfoa"]
+radius = 1.5
+
+[node name="Projectile Prefab" type="RigidBody2D" node_paths=PackedStringArray("ProjectileShape", "ProjectileSprite")]
+collision_layer = 8
+collision_mask = 6
+physics_material_override = SubResource("PhysicsMaterial_glan8")
+gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 1
+script = ExtResource("1_glan8")
+ProjectileShape = NodePath("Projectile Shape")
+ProjectileSprite = NodePath("Projectile Sprite")
+
+[node name="Projectile Shape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cjfoa")
+
+[node name="Projectile Sprite" type="Sprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("2_2pepr")
+
+[connection signal="body_entered" from="." to="." method="HitObject"]

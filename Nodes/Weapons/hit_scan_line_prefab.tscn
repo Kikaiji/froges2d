@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://d0tqxx5kguxyp"]
+
+[ext_resource type="Script" uid="uid://b1dbh3yt2pl6i" path="res://Scripts/Game/Weapons/Projectiles/HitScanLine.cs" id="1_ktu4c"]
+
+[node name="HitScanLine" type="Line2D"]
+points = PackedVector2Array(0, 0)
+script = ExtResource("1_ktu4c")

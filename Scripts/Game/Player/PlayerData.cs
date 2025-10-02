@@ -13,10 +13,17 @@ public class PlayerData
 	
 	public delegate void PlayerAttackEvents(FrogWeapon attackingWeapon, Vector2 mousePosition);
 	public static event PlayerAttackEvents playerJustAttacked;
+	public static event PlayerAttackEvents playerJustStopAttack;
 	
-	public void PlayerAttacked(Vector2 mousePosition){
+	public void PlayerStartAttack(Vector2 mousePosition){
 		if(playerJustAttacked != null){
 			playerJustAttacked.Invoke(_mainFrog, mousePosition);
+		}
+	}
+	
+	public void PlayerStopAttack(Vector2 mousePosition){
+		if(playerJustStopAttack != null){
+			playerJustStopAttack.Invoke(_mainFrog, mousePosition);
 		}
 	}
 	
@@ -44,6 +51,31 @@ public class PlayerData
 	public delegate void AmmoCountModified(int newCount);
 	public static event AmmoCountModified sideAmmoChanged;
 	public static event AmmoCountModified mainAmmoChanged;
+	
+	public void ReloadMainWeapon(){
+		_mainCurrentAmmo = _mainFrog.frogMaxAmmo;
+		
+		if(mainAmmoChanged != null){
+			mainAmmoChanged.Invoke(_mainCurrentAmmo);
+		}
+	}
+	
+	public bool TryUseAmmo(int ammoToUse){
+		if(_mainCurrentAmmo >= ammoToUse){
+			_mainCurrentAmmo -= ammoToUse;
+			
+			if(mainAmmoChanged != null){
+				mainAmmoChanged.Invoke(_mainCurrentAmmo);
+			}
+			
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	
 	
 	private int _mainCurrentAmmo;
 	public int MainCurrentAmmo => _mainCurrentAmmo;
@@ -132,4 +164,30 @@ public class PlayerData
 			currentHealthChanged.Invoke();
 		}
 	}
+	
+	public float CalculateDamage(float baseDamage){
+		//this will apply modifiers to the damage passed in
+		GD.Print("Damage Calcs not implemented yet");
+		return baseDamage;
+	}
+	
+	public delegate void PlayerTriggerEvents();
+	public static event PlayerTriggerEvents playerHitEnemy;
+	public static event PlayerTriggerEvents playerKillEnemy;
+	public static event PlayerTriggerEvents playerHitEnvironment;
+	
+	public void PlayerJustHitEnemy() => playerHitEnemy?.Invoke();
+	public void PlayerJustKilledEnemy() => playerKillEnemy?.Invoke();
+	public void PlayerJustHitEnvironment() => playerHitEnvironment?.Invoke();
+	
+	public static event PlayerTriggerEvents playerHurt;
+	
+	public static event PlayerTriggerEvents playerFireWeapon;
+	public static event PlayerTriggerEvents playerReloadWeapon;
+	
+	public void PlayerJustFiredWeapon() => playerFireWeapon?.Invoke();
+	public void PlayerJustReloadedWeapon() => playerReloadWeapon?.Invoke();
+	
+	
+	
 }

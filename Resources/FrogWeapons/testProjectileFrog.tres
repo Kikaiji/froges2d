@@ -1,14 +1,20 @@
-[gd_resource type="Resource" load_steps=4 format=3 uid="uid://bo4e3jcaue6xo"]
+[gd_resource type="Resource" load_steps=5 format=3 uid="uid://bo4e3jcaue6xo"]
 
 [ext_resource type="Texture2D" uid="uid://bohvic2um5gvu" path="res://Sprites/Temp Sprites/textfroggyweaponhold2.tres" id="1_6yu7w"]
 [ext_resource type="Texture2D" uid="uid://ck0pdenklkluc" path="res://Sprites/Temp Sprites/frog.jpg" id="2_3aesl"]
+[ext_resource type="Resource" uid="uid://dp72iat2g8jbg" path="res://Resources/Projectiles/testProjectile.tres" id="3_3aesl"]
 [ext_resource type="Script" uid="uid://cj4ms5k80t0xb" path="res://Scripts/Game/Weapons/Frogs/Resources/FrogWeaponProjectile.cs" id="3_qfpcs"]
 
 [resource]
 script = ExtResource("3_qfpcs")
+frogWeaponProjectile = ExtResource("3_3aesl")
+frogBaseFireRate = 0.1
+frogBaseDamage = 1.0
+frogReloadSpeed = 1.0
 frogName = "Projectile Frog"
 frogType = 1
 frogId = "projectileFrog"
 frogMaxAmmo = 5
 frogIcon = ExtResource("2_3aesl")
 frogHoldSprite = ExtResource("1_6yu7w")
+frogBarrelDistance = 1.0
