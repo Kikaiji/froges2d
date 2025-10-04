@@ -118,18 +118,28 @@ target_position = Vector2(23.65, 0)
 collision_mask = 6
 hit_from_inside = true
 
-[node name="Weapon" type="Node2D" parent="CharacterBody2D" node_paths=PackedStringArray("PlayerBody", "WeaponSprite", "HitScanRay")]
+[node name="Weapon" type="Node2D" parent="CharacterBody2D" node_paths=PackedStringArray("PlayerBody", "WeaponSprite", "HitScanRay", "DelayDisplay")]
 script = ExtResource("7_vy0jd")
 PlayerBody = NodePath("..")
 WeaponSprite = NodePath("WeaponSprite")
 HitScanRay = NodePath("../HitScan Ray")
 HitScanLine = ExtResource("8_cjfoa")
 ProjectilePrefab = ExtResource("20_pv5k4")
+DelayDisplay = NodePath("../ProgressBar")
 
 [node name="WeaponSprite" type="Sprite2D" parent="CharacterBody2D/Weapon"]
 texture_filter = 1
 position = Vector2(3, 0)
 scale = Vector2(0.3, 0.3)
+
+[node name="ProgressBar" type="ProgressBar" parent="CharacterBody2D"]
+visible = false
+offset_left = -4.9999995
+offset_top = -6.9999995
+offset_right = 95.0
+offset_bottom = 20.0
+scale = Vector2(0.1, 0.1)
+show_percentage = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

@@ -10,8 +10,12 @@ public partial class PlayerAttacker : Node2D
 	[Export] public PackedScene HitScanLine;
 	
 	[Export] public PackedScene ProjectilePrefab;
+	[Export] public ProgressBar DelayDisplay;
 	
 	private float _firingDelay = 0f;
+	private float _initFiringDelay = 0f;
+	private float _sideFiringDelay = 0f;
+	private float _sideInitFiringDelay = 0f;
 	private bool _attackHeld = false;
 	
 	public override void _Process(double delta){
@@ -24,19 +28,62 @@ public partial class PlayerAttacker : Node2D
 		var rayCastDirection = PlayerBody.GlobalPosition + (PlayerBody.MousePosRelativeToPlayer.Normalized() * 500f);
 		HitScanRay.TargetPosition = rayCastDirection;
 		
-		_firingDelay -= (float)delta;
+		if(_firingDelay > 0){
+			_firingDelay -= (float)delta;
+			DelayDisplay.Value = (_firingDelay / _initFiringDelay) * 100;
+		} else{
+			DelayDisplay.Visible = false;
+		}
+		
+		_sideFiringDelay -= (float)delta;
+	}
+	
+	private void SetFiringDelay(float newDelay){
+		_firingDelay = newDelay;
+		_initFiringDelay = newDelay;
+		DelayDisplay.Visible = true;
 	}
 	
 	public override void _EnterTree(){
 		PlayerData.mainFrogChanged += UpdateWeaponSprite;
 		PlayerData.playerJustAttacked += StartAttack;
 		PlayerData.playerJustStopAttack += StopAttack;
+		PlayerData.swapFrogs += SwapFiringDelay;
+		PlayerData.mainFrogChanged += MainFrogChanged;
+		PlayerData.sideFrogChanged += SideFrogChanged;
 	}
 	
 	public override void _ExitTree(){
 		PlayerData.mainFrogChanged -= UpdateWeaponSprite;
 		PlayerData.playerJustAttacked -= StartAttack;
-		PlayerData.playerJustStopAttack += StopAttack;
+		PlayerData.playerJustStopAttack -= StopAttack;
+		PlayerData.swapFrogs -= SwapFiringDelay;
+		PlayerData.mainFrogChanged -= MainFrogChanged;
+		PlayerData.sideFrogChanged -= SideFrogChanged;
+	}
+	
+	private void SwapFiringDelay(FrogWeapon weapon){
+		(_firingDelay, _sideFiringDelay) = (_sideFiringDelay, _firingDelay);
+	}
+	
+	private void MainFrogChanged(FrogWeapon weapon){
+		if(weapon != null){
+			SetFiringDelay(0.5f);
+			return;
+		}
+		
+		SetFiringDelay(0);
+	}
+	
+	private void SideFrogChanged(FrogWeapon weapon){
+		if(weapon != null){
+			_sideFiringDelay = 0.5f;
+			_sideInitFiringDelay = 0.5f;
+			return;
+		}
+		
+		_sideFiringDelay = 0f;
+		_sideInitFiringDelay = 0f;
 	}
 	
 	private void AimWeaponSprite(){
@@ -59,15 +106,17 @@ public partial class PlayerAttacker : Node2D
 	}
 	
 	private void StartAttack(FrogWeapon currentWeapon, Vector2 mouseGlobalPosition){
-		if(currentWeapon == null) return;
+		if(currentWeapon == null ) return;
+		
 		switch(currentWeapon.frogFiringType){
-			case FiringType.Auto:
-				_attackHeld = true;
-				break;
-			case FiringType.Semi:
-				if(_firingDelay < 0) WeaponAttack(currentWeapon, mouseGlobalPosition);
-				break;
+				case FiringType.Auto:
+					_attackHeld = true;
+					break;
+				case FiringType.Semi:
+					if(_firingDelay < 0) WeaponAttack(currentWeapon, mouseGlobalPosition);
+					break;
 		}
+		
 	}
 	
 	private void StopAttack(FrogWeapon currentWeapon, Vector2 mouseGlobalPosition){
@@ -75,7 +124,8 @@ public partial class PlayerAttacker : Node2D
 	}
 	
 	private void WeaponAttack(FrogWeapon currentWeapon, Vector2 mouseGlobalPosition){
-		switch(currentWeapon.frogType){
+		if((PlayerData.Instance.TryUseAmmo(1))){
+			switch(currentWeapon.frogType){
 			case WeaponType.HitScan:
 				HitScanWeaponAttack(currentWeapon as FrogWeaponHitScan, mouseGlobalPosition);
 				break;
@@ -88,12 +138,22 @@ public partial class PlayerAttacker : Node2D
 			case WeaponType.Melee:
 				MeleeWeaponAttack(currentWeapon as FrogWeaponMelee, mouseGlobalPosition);
 				break;
+			}
+			PlayerData.Instance.PlayerJustFiredWeapon();
+			
+			if(PlayerData.Instance.MainCurrentAmmo <= 0){
+				SetFiringDelay(currentWeapon.frogReloadSpeed);
+				PlayerData.Instance.ReloadMainWeapon();
+			}
+		} else{
+			SetFiringDelay(currentWeapon.frogReloadSpeed);
+			PlayerData.Instance.ReloadMainWeapon();
 		}
 	}
 	
 	private void HitScanWeaponAttack(FrogWeaponHitScan currentHitScanWeapon, Vector2 mouseGlobalPosition){
 		
-		_firingDelay = currentHitScanWeapon.frogBaseFireRate;
+		SetFiringDelay(currentHitScanWeapon.frogBaseFireRate);
 		
 		var hitScanLine = HitScanLine.Instantiate() as HitScanLine;
 		GetTree().GetCurrentScene().AddChild(hitScanLine);
@@ -148,7 +208,7 @@ public partial class PlayerAttacker : Node2D
 		GetTree().GetCurrentScene().AddChild(newProjectile);
 		newProjectile.GlobalPosition = PlayerBody.GlobalPosition + (PlayerBody.MousePosRelativeToPlayer.Normalized() * currentProjectileWeapon.frogBarrelDistance);
 		
-		_firingDelay = currentProjectileWeapon.frogBaseFireRate;
+		SetFiringDelay(currentProjectileWeapon.frogBaseFireRate);
 	}
 	
 	private void TurretWeaponAttack(FrogWeaponTurret currentTurretWeapon, Vector2 mouseGlobalPosition){

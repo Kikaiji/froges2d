@@ -17,3 +17,4 @@ frogMaxAmmo = 5
 frogIcon = ExtResource("2_2mfit")
 frogHoldSprite = ExtResource("1_qkfvt")
 frogBarrelDistance = 5.0
+frogReloadSpeed = 2.0

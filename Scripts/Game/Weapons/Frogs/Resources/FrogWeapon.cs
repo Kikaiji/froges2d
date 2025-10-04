@@ -11,6 +11,7 @@ public partial class FrogWeapon : Resource
 	[Export] public Texture2D frogIcon;
 	[Export] public Texture2D frogHoldSprite;
 	[Export] public float frogBarrelDistance;
+	[Export] public float frogReloadSpeed;
 }
 
 

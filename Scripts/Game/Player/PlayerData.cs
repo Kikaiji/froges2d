@@ -42,6 +42,7 @@ public class PlayerData
 	public delegate void FrogModified(FrogWeapon newWeapon);
 	public static event FrogModified sideFrogChanged;
 	public static event FrogModified mainFrogChanged;
+	public static event FrogModified swapFrogs;
 	
 	private FrogWeapon _mainFrog;
 	public FrogWeapon MainFrog => _mainFrog;
@@ -53,7 +54,9 @@ public class PlayerData
 	public static event AmmoCountModified mainAmmoChanged;
 	
 	public void ReloadMainWeapon(){
+		
 		_mainCurrentAmmo = _mainFrog.frogMaxAmmo;
+		PlayerJustReloadedWeapon();
 		
 		if(mainAmmoChanged != null){
 			mainAmmoChanged.Invoke(_mainCurrentAmmo);
@@ -151,6 +154,10 @@ public class PlayerData
 		if(sideFrogChanged != null && sideAmmoChanged != null){
 			sideFrogChanged.Invoke(_sideFrog);
 			sideAmmoChanged.Invoke(_sideCurrentAmmo);
+		}
+		
+		if(swapFrogs != null){
+			swapFrogs.Invoke(null);
 		}
 	}
 	
