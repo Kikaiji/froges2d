@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=5 format=3 uid="uid://cfrryug74sm8m"]
+
+[ext_resource type="Texture2D" uid="uid://b6fjls0o0qn0b" path="res://Sprites/Temp Sprites/testProjectile.tres" id="1_15f8g"]
+[ext_resource type="Texture2D" uid="uid://ck0pdenklkluc" path="res://Sprites/Temp Sprites/frog.jpg" id="2_8xby8"]
+[ext_resource type="Resource" uid="uid://bxt2ah7j6k0di" path="res://Resources/FrogTurrets/testFrogTurret.tres" id="3_w8kqb"]
+[ext_resource type="Script" uid="uid://ct5bwo8xml1jb" path="res://Scripts/Game/Weapons/Frogs/Resources/FrogWeaponTurret.cs" id="4_2aym0"]
+
+[resource]
+script = ExtResource("4_2aym0")
+frogWeaponTurretSpawn = ExtResource("3_w8kqb")
+frogMaxTurrets = 3
+frogTurretRechargeSpeed = 1.0
+frogTurretPlacementRange = 20.0
+frogName = "Turret Frog 2"
+frogType = 2
+frogFiringType = 1
+frogId = "turretFrog2"
+frogMaxAmmo = 3
+frogIcon = ExtResource("2_8xby8")
+frogHoldSprite = ExtResource("1_15f8g")
+frogReloadSpeed = 1.0

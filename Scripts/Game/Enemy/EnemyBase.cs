@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class EnemyBase : Node
+public partial class EnemyBase : RigidBody2D
 {
 	public int EnemyBaseHealth = 10;
 	

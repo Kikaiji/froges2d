@@ -6,8 +6,13 @@
 
 [resource]
 script = ExtResource("1_p7uk3")
+frogSwingEndLag = 0.5
+frogSwingBaseDamage = 1.0
+frogSwingSize = 20.0
+frogSwingAngle = 90.0
 frogName = "Melee Frog"
 frogType = 3
+frogFiringType = 1
 frogId = "meleeFrog"
 frogIcon = ExtResource("2_2rwpv")
 frogHoldSprite = ExtResource("1_ssau5")

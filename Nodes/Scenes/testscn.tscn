@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://cdes7tkcjernu"]
+[gd_scene load_steps=35 format=4 uid="uid://cdes7tkcjernu"]
 
 [ext_resource type="Texture2D" uid="uid://b3sfvc6vkpc1a" path="res://Sprites/playeratlas.tres" id="1_ipu5k"]
 [ext_resource type="Script" uid="uid://hgskuehulatj" path="res://Scripts/Interaction/PlayerController.cs" id="1_pyui1"]
@@ -16,11 +16,16 @@
 [ext_resource type="PackedScene" uid="uid://d0tqxx5kguxyp" path="res://Nodes/Weapons/hit_scan_line_prefab.tscn" id="8_cjfoa"]
 [ext_resource type="Script" uid="uid://chjlkkqyhtp4p" path="res://Scripts/debug/DebugFrogPanel.cs" id="8_gdkmg"]
 [ext_resource type="Script" uid="uid://o7d7vvbr70d2" path="res://Scripts/debug/DebugRemoveFrog.cs" id="10_bsx07"]
+[ext_resource type="Script" uid="uid://dwtupkmuvrc4e" path="res://Scripts/Game/Player/MeleeAreaShape.cs" id="11_hp7i7"]
 [ext_resource type="Script" uid="uid://cwqms8es76ns3" path="res://Scripts/Game/Camera/CameraFollow.cs" id="11_taw7x"]
 [ext_resource type="TileSet" uid="uid://eqbvbpeyu5ao" path="res://Resources/TileMaps/debug tileset.tres" id="12_lvp6j"]
 [ext_resource type="Texture2D" uid="uid://dl85mtmlyvirt" path="res://Sprites/Bought Assets/Assets 2(Scale x1)-No-BG.png" id="18_jgnfu"]
 [ext_resource type="Texture2D" uid="uid://rvuogtmu7rur" path="res://Sprites/Temp Sprites/test dummy.tres" id="18_vy0jd"]
 [ext_resource type="PackedScene" uid="uid://day3shxjg5d6f" path="res://Nodes/Weapons/projectile_prefab.tscn" id="20_pv5k4"]
+[ext_resource type="Script" uid="uid://0ubjitogbjcm" path="res://Scripts/Game/Enemy/EnemyBase.cs" id="22_6rv80"]
+[ext_resource type="PackedScene" uid="uid://dxx87je08yrh1" path="res://Nodes/Weapons/turret_prefab.tscn" id="22_h64cv"]
+[ext_resource type="Texture2D" uid="uid://cid08x25opcwo" path="res://Sprites/Temp Sprites/swing.png" id="25_o0fok"]
+[ext_resource type="Script" uid="uid://btqicrp1akn3t" path="res://Scripts/Game/Player/MeleeSwingTrail.cs" id="26_0nc2n"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o073o"]
 radius = 2.0
@@ -36,6 +41,8 @@ particles_animation = true
 particles_anim_h_frames = 1
 particles_anim_v_frames = 9
 particles_anim_loop = false
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_h64cv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mafvg"]
 bg_color = Color(0.15487596, 0.154876, 0.15487587, 1)
@@ -118,14 +125,16 @@ target_position = Vector2(23.65, 0)
 collision_mask = 6
 hit_from_inside = true
 
-[node name="Weapon" type="Node2D" parent="CharacterBody2D" node_paths=PackedStringArray("PlayerBody", "WeaponSprite", "HitScanRay", "DelayDisplay")]
+[node name="Weapon" type="Node2D" parent="CharacterBody2D" node_paths=PackedStringArray("PlayerBody", "WeaponSprite", "HitScanRay", "DelayDisplay", "MeleeTrail")]
 script = ExtResource("7_vy0jd")
 PlayerBody = NodePath("..")
 WeaponSprite = NodePath("WeaponSprite")
 HitScanRay = NodePath("../HitScan Ray")
 HitScanLine = ExtResource("8_cjfoa")
 ProjectilePrefab = ExtResource("20_pv5k4")
+TurretPrefab = ExtResource("22_h64cv")
 DelayDisplay = NodePath("../ProgressBar")
+MeleeTrail = NodePath("../Line2D")
 
 [node name="WeaponSprite" type="Sprite2D" parent="CharacterBody2D/Weapon"]
 texture_filter = 1
@@ -140,6 +149,24 @@ offset_right = 95.0
 offset_bottom = 20.0
 scale = Vector2(0.1, 0.1)
 show_percentage = false
+
+[node name="MeleeArea" type="Area2D" parent="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/MeleeArea"]
+shape = SubResource("CircleShape2D_h64cv")
+script = ExtResource("11_hp7i7")
+
+[node name="Line2D" type="Line2D" parent="CharacterBody2D"]
+texture_filter = 1
+points = PackedVector2Array(7.00794, 7.133637, 5.662731, 8.242177, 4.145462, 9.100283, 2.5022352, 9.681881, 0.7829794, 9.9693, -0.960066, 9.953808, -2.673941, 9.635873, -4.306571, 9.025156, -5.8083463, 8.140217, -7.1336374, 7.0079393, -7.1336374, 7.00794)
+width = 9.73
+texture = ExtResource("25_o0fok")
+texture_mode = 2
+joint_mode = 2
+script = ExtResource("26_0nc2n")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -436,6 +463,7 @@ position = Vector2(49, -23)
 collision_layer = 2
 collision_mask = 7
 gravity_scale = 0.0
+script = ExtResource("22_6rv80")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Test Dummy"]
 shape = SubResource("CircleShape2D_jgnfu")
@@ -445,8 +473,7 @@ texture_filter = 1
 scale = Vector2(0.3, 0.3)
 texture = ExtResource("18_vy0jd")
 
-[node name="Projectile Prefab" parent="." instance=ExtResource("20_pv5k4")]
-position = Vector2(-39, -28)
-
+[connection signal="body_entered" from="CharacterBody2D/MeleeArea" to="CharacterBody2D/Weapon" method="BodyEnteredMeleeArea"]
+[connection signal="body_exited" from="CharacterBody2D/MeleeArea" to="CharacterBody2D/Weapon" method="BodyExitedMeleeArea"]
 [connection signal="button_down" from="CanvasLayer/UI Display/Debug Panel/DebugRemoveFrogs/Remove Main" to="CanvasLayer/UI Display/Debug Panel/DebugRemoveFrogs" method="RemoveMainFrog"]
 [connection signal="button_down" from="CanvasLayer/UI Display/Debug Panel/DebugRemoveFrogs/Remove Side" to="CanvasLayer/UI Display/Debug Panel/DebugRemoveFrogs" method="RemoveSideFrog"]

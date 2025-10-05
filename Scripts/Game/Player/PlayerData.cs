@@ -53,23 +53,47 @@ public class PlayerData
 	public static event AmmoCountModified sideAmmoChanged;
 	public static event AmmoCountModified mainAmmoChanged;
 	
+	private int _mainCurrentAmmo;
+	public int MainCurrentAmmo => _mainCurrentAmmo;
+	private int _sideCurrentAmmo;
+	public int SideCurrentAmmo => _sideCurrentAmmo;
+	
+	private void MainFrogJustChanged(FrogWeapon newFrog){
+		if(mainFrogChanged != null){
+			mainFrogChanged.Invoke(newFrog);
+		}
+	}
+	
+	private void MainAmmoJustChanged(int newAmmoCount){
+		if(mainAmmoChanged != null){
+				mainAmmoChanged.Invoke(newAmmoCount);
+		}
+	}
+	
+	private void SideFrogJustChanged(FrogWeapon newFrog){
+		if(sideFrogChanged != null){
+			sideFrogChanged.Invoke(newFrog);
+		}
+	}
+	
+	private void SideAmmoJustChanged(int newAmmoCount){
+		if(sideAmmoChanged != null){
+				sideAmmoChanged.Invoke(_sideCurrentAmmo);
+		}
+	}
+	
 	public void ReloadMainWeapon(){
 		
 		_mainCurrentAmmo = _mainFrog.frogMaxAmmo;
 		PlayerJustReloadedWeapon();
-		
-		if(mainAmmoChanged != null){
-			mainAmmoChanged.Invoke(_mainCurrentAmmo);
-		}
+		MainAmmoJustChanged(_mainCurrentAmmo);
 	}
 	
 	public bool TryUseAmmo(int ammoToUse){
 		if(_mainCurrentAmmo >= ammoToUse){
 			_mainCurrentAmmo -= ammoToUse;
 			
-			if(mainAmmoChanged != null){
-				mainAmmoChanged.Invoke(_mainCurrentAmmo);
-			}
+			MainAmmoJustChanged(_mainCurrentAmmo);
 			
 			return true;
 		} else {
@@ -78,12 +102,40 @@ public class PlayerData
 		
 	}
 	
+	public void TryAddAmmo(int ammoToAdd){
+		
+		if((_mainCurrentAmmo + ammoToAdd) > _mainFrog.frogMaxAmmo){
+			_mainCurrentAmmo = _mainFrog.frogMaxAmmo;
+		} else{
+			_mainCurrentAmmo += ammoToAdd;
+		}
+		
+		MainAmmoJustChanged(_mainCurrentAmmo);
+	}
 	
-	
-	private int _mainCurrentAmmo;
-	public int MainCurrentAmmo => _mainCurrentAmmo;
-	private int _sideCurrentAmmo;
-	public int SideCurrentAmmo => _sideCurrentAmmo;
+	public bool TryUseSideAmmo(int ammoToUse){
+		if(_sideCurrentAmmo >= ammoToUse){
+			_sideCurrentAmmo -= ammoToUse;
+			
+			SideAmmoJustChanged(_sideCurrentAmmo);
+			
+			return true;
+		} else {
+			return false;
+		}
+	}
+		
+	public void TryAddSideAmmo(int ammoToAdd){
+		
+		if((_sideCurrentAmmo + ammoToAdd) > _sideFrog.frogMaxAmmo){
+			_sideCurrentAmmo = _sideFrog.frogMaxAmmo;
+		} else{
+			_sideCurrentAmmo += ammoToAdd;
+		}
+		
+		SideAmmoJustChanged(_sideCurrentAmmo);
+	}
+
 	
 	public delegate void StatModified();
 	
@@ -109,10 +161,9 @@ public class PlayerData
 		_mainFrog = newFrog;
 		_mainCurrentAmmo = _mainFrog.frogMaxAmmo;
 		
-		if(mainFrogChanged != null && mainAmmoChanged != null){
-			mainFrogChanged.Invoke(_mainFrog);
-			mainAmmoChanged.Invoke(_mainFrog.frogMaxAmmo);
-		}
+
+		MainFrogJustChanged(_mainFrog);
+		MainAmmoJustChanged(_mainFrog.frogMaxAmmo);
 	}
 	
 	public void RemoveMainFrog(){
@@ -126,35 +177,27 @@ public class PlayerData
 		_sideFrog = newFrog;
 		_sideCurrentAmmo = _sideFrog.frogMaxAmmo;
 		
-		if(sideFrogChanged != null && sideAmmoChanged != null){
-			sideFrogChanged.Invoke(_sideFrog);
-			sideAmmoChanged.Invoke(_sideFrog.frogMaxAmmo);
-		}
+		SideFrogJustChanged(_sideFrog);
+		SideAmmoJustChanged(_sideFrog.frogMaxAmmo);
 	}
 	
 	public void RemoveSideFrog(){
 		_sideFrog = null;
 		_sideCurrentAmmo = 0;
 		
-		if(sideFrogChanged != null && sideAmmoChanged != null){
-			sideFrogChanged.Invoke(_sideFrog);
-			sideAmmoChanged.Invoke(_sideCurrentAmmo);
-		}
+		SideFrogJustChanged(_sideFrog);
+		SideAmmoJustChanged(_sideCurrentAmmo);
 	}
 	
 	public void SwapFrogs(){
 		(_mainFrog, _sideFrog) = (_sideFrog, _mainFrog);
 		(_mainCurrentAmmo, _sideCurrentAmmo) = (_sideCurrentAmmo, _mainCurrentAmmo);
 		
-		if(mainFrogChanged != null && mainAmmoChanged != null){
-			mainFrogChanged.Invoke(_mainFrog);
-			mainAmmoChanged.Invoke(_mainCurrentAmmo);
-		}
+		MainFrogJustChanged(_mainFrog);
+		MainAmmoJustChanged(_mainCurrentAmmo);
 		
-		if(sideFrogChanged != null && sideAmmoChanged != null){
-			sideFrogChanged.Invoke(_sideFrog);
-			sideAmmoChanged.Invoke(_sideCurrentAmmo);
-		}
+		SideFrogJustChanged(_sideFrog);
+		SideAmmoJustChanged(_sideCurrentAmmo);
 		
 		if(swapFrogs != null){
 			swapFrogs.Invoke(null);
@@ -194,6 +237,14 @@ public class PlayerData
 	
 	public void PlayerJustFiredWeapon() => playerFireWeapon?.Invoke();
 	public void PlayerJustReloadedWeapon() => playerReloadWeapon?.Invoke();
+	
+	public static event PlayerTriggerEvents playerTurretPlaced;
+	public static event PlayerTriggerEvents playerTurretRemoved;
+	public static event PlayerTriggerEvents playerTurretKilled;
+	
+	public void PlayerJustPlacedTurret() => playerTurretPlaced?.Invoke();
+	public void PlayerJustRemovedTurret() => playerTurretRemoved?.Invoke();
+	public void PlayerTurretJustKilled() => playerTurretKilled?.Invoke();
 	
 	
 	

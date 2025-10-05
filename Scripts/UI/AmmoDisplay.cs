@@ -17,6 +17,13 @@ public partial class AmmoDisplay : Control
 			SetCurrentAmmoDisplay(0);
 			return;
 		}
+		
+		if(newFrog.frogType == WeaponType.Melee){
+			this.Visible = false;
+		} else {
+			this.Visible = true;
+		}
+		
 		_maxAmmoDisplay.Text = newFrog.frogMaxAmmo.ToString();
 	}
 	

@@ -103,5 +103,7 @@ public partial class PlayerController : CharacterBody2D
 		PlayerData.Instance.SwapFrogs();
 	}
 	
-	
+	public Vector2 GetPositionRelativeToPlayer(Vector2 globalPos){
+		return globalPos - this.GlobalPosition;
+	}
 }

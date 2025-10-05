@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=4 format=3 uid="uid://bxt2ah7j6k0di"]
+
+[ext_resource type="Script" uid="uid://d2ocdupd6dt1w" path="res://Scripts/Game/Weapons/Frogs/Resources/FrogTurret.cs" id="1_u5prw"]
+[ext_resource type="Resource" uid="uid://dp72iat2g8jbg" path="res://Resources/Projectiles/testProjectile.tres" id="2_oylao"]
+[ext_resource type="Texture2D" uid="uid://rvuogtmu7rur" path="res://Sprites/Temp Sprites/test dummy.tres" id="3_uetdl"]
+
+[resource]
+script = ExtResource("1_u5prw")
+turretProjectile = ExtResource("2_oylao")
+turretBaseFireRate = 1.0
+turretBaseDamage = 1.0
+turretLifeTime = 10.0
+turretSprite = ExtResource("3_uetdl")
