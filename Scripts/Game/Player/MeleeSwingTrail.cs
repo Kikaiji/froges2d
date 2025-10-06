@@ -38,7 +38,7 @@ public partial class MeleeSwingTrail : Line2D
 	private List<Vector2> CalculateInBetweens(Vector2 startAngle, Vector2 endAngle){
 		float radBetween = startAngle.AngleTo(endAngle);
 		int numInBetween = Mathf.FloorToInt((radBetween - (radBetween % Mathf.DegToRad(_inBetweenInterval))) / Mathf.DegToRad(_inBetweenInterval));
-		GD.Print("Inbetweens " + numInBetween);
+		//GD.Print("Inbetweens " + numInBetween);
 		float distanceBetweenInterval = radBetween / numInBetween;
 		
 		List<Vector2> results = new List<Vector2>();
