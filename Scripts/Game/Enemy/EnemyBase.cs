@@ -8,6 +8,10 @@ public partial class EnemyBase : RigidBody2D
 	
 	[Export] public CpuParticles2D HitParticles;
 	
+	public override void _Ready(){
+		EnemyData.Instance.EnemyJustSpawned(this);	
+	}	
+	
 	public void HitEnemy(float damageTaken){
 		EnemyOnHitEffects(damageTaken);
 	}

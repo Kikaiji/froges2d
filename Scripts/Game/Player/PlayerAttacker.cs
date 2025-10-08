@@ -304,10 +304,21 @@ public partial class PlayerAttacker : Node2D
 		if(firstEmpty >= 0){
 			currentWeaponTurrets[firstEmpty] = newTurret;
 		} else{
-			currentWeaponTurrets[0].QueueFree();
-			PlayerData.Instance.PlayerJustRemovedTurret();
-			Array.Copy(currentWeaponTurrets, 1, currentWeaponTurrets, 0, currentWeaponTurrets.Length - 1);
-			currentWeaponTurrets[currentWeaponTurrets.Length - 1] = newTurret;
+			bool foundEmpty = false;
+			for(int i = 0; i < currentWeaponTurrets.Length; i++){
+				if(!IsInstanceValid(currentWeaponTurrets[i])){
+					foundEmpty = true;
+					currentWeaponTurrets[i] = newTurret;
+					break;
+				}
+			}
+			
+			if(!foundEmpty){
+				currentWeaponTurrets[0].QueueFree();
+				PlayerData.Instance.PlayerJustRemovedTurret();
+				Array.Copy(currentWeaponTurrets, 1, currentWeaponTurrets, 0, currentWeaponTurrets.Length - 1);
+				currentWeaponTurrets[currentWeaponTurrets.Length - 1] = newTurret;
+			}
 		}
 		
 		Vector2 placementPos = Vector2.Zero;

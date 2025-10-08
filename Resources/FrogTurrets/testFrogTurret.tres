@@ -11,3 +11,4 @@ turretBaseFireRate = 1.0
 turretBaseDamage = 1.0
 turretLifeTime = 10.0
 turretSprite = ExtResource("3_uetdl")
+turretVisionRange = 50.0

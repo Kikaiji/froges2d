@@ -9,6 +9,8 @@ public partial class FrogTurret : Resource
 	[Export] public float turretLifeTime;
 	[Export] public Texture2D turretSprite;
 	[Export] public TurretAimType turretAimType;
+	[Export] public float turretBarrelDistance;
+	[Export] public float turretVisionRange;
 }
 
 public enum TurretAimType
