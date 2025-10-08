@@ -6,6 +6,7 @@ public partial class PlayerAttacker : Node2D
 {
 	[Export] public PlayerController PlayerBody;
 	[Export] public Sprite2D WeaponSprite;
+	[Export] public Sprite2D MeleeWeaponSprite;
 	
 	[Export] public RayCast2D HitScanRay;
 	[Export] public PackedScene HitScanLine;
@@ -32,6 +33,8 @@ public partial class PlayerAttacker : Node2D
 	private bool _sideAmmoRegen = false;
 	private float _sideRegenTimer = 0f;
 	private float _sideInitRegenTimer = 0f;
+	
+	private bool _upswing = true;
 	
 	
 
@@ -157,6 +160,18 @@ public partial class PlayerAttacker : Node2D
 			return;
 		}
 		
+		if(newFrog.frogType == WeaponType.Melee){
+			MeleeWeaponSprite.Texture = newFrog.frogHoldSprite;
+			MeleeWeaponSprite.Offset = new Vector2(5f + (newFrog.frogHoldSprite.GetWidth() / 2), 0f);
+			var newMeleeFrog = newFrog as FrogWeaponMelee;
+			MeleeWeaponSprite.Rotation = Mathf.DegToRad(newMeleeFrog.frogSwingAngle / 2);
+			
+			WeaponSprite.Texture = null;
+			return;
+		} else {
+			MeleeWeaponSprite.Texture = null;
+		}
+		
 		WeaponSprite.Texture = newFrog.frogHoldSprite;
 	}
 	
@@ -241,6 +256,7 @@ public partial class PlayerAttacker : Node2D
 			EnemyBase enemy = hitCollider as EnemyBase;
 			if(enemy != null){
 				enemy.HitEnemy(PlayerData.Instance.CalculateDamage(currentHitScanWeapon.frogBaseDamage));
+				KnockBackEnemy(enemy, PlayerBody.GetPositionRelativeToPlayer(enemy.GlobalPosition).Normalized(), currentHitScanWeapon.frogBaseKnockBack);
 			}
 			PlayerData.Instance.PlayerJustHitEnemy();
 			GD.Print("hit an enemy " + hitCollisionObject.Name);
@@ -250,6 +266,8 @@ public partial class PlayerAttacker : Node2D
 			SetFiringDelay(currentHitScanWeapon.frogReloadSpeed);
 			PlayerData.Instance.ReloadMainWeapon();
 		}
+		
+		
 	}
 	
 	private void ProjectileWeaponAttack(FrogWeaponProjectile currentProjectileWeapon, Vector2 mouseGlobalPosition){
@@ -259,6 +277,11 @@ public partial class PlayerAttacker : Node2D
 		newProjectile.GlobalPosition = PlayerBody.GlobalPosition + (PlayerBody.MousePosRelativeToPlayer.Normalized() * currentProjectileWeapon.frogBarrelDistance);
 		
 		SetFiringDelay(currentProjectileWeapon.frogBaseFireRate);
+		
+		if(PlayerData.Instance.MainCurrentAmmo <= 0){
+			SetFiringDelay(currentProjectileWeapon.frogReloadSpeed);
+			PlayerData.Instance.ReloadMainWeapon();
+		}
 	}
 	
 	private void TurretWeaponAttack(FrogWeaponTurret currentTurretWeapon, Vector2 mouseGlobalPosition){
@@ -310,7 +333,14 @@ public partial class PlayerAttacker : Node2D
 		
 		GD.Print("Start " + startPos + ". End " + endPos);
 		
-		MeleeTrail.DisplayTrail(startPos, endPos, currentMeleeWeapon.frogSwingSize);
+		if(_upswing){
+			MeleeTrail.DisplayTrail(endPos, startPos, currentMeleeWeapon.frogSwingSize);
+		} else {
+			MeleeTrail.DisplayTrail(startPos, endPos, currentMeleeWeapon.frogSwingSize);
+		}
+		
+		
+		
 		
 		for(int i = 0; i < _enemiesInRange.Count; i++){
 			EnemyBase enemy = _enemiesInRange[i];
@@ -320,10 +350,29 @@ public partial class PlayerAttacker : Node2D
 				enemy.HitEnemy(PlayerData.Instance.CalculateDamage(currentMeleeWeapon.frogSwingBaseDamage));
 				PlayerData.Instance.PlayerJustHitEnemy();
 				GD.Print("Hit " + enemy);
+				
+				if(_upswing){
+					KnockBackEnemy(enemy, PlayerBody.GetPositionRelativeToPlayer(enemy.GlobalPosition).Rotated(Mathf.DegToRad(-90f)).Normalized(), currentMeleeWeapon.frogBaseKnockBack);
+				}	else {
+					KnockBackEnemy(enemy, PlayerBody.GetPositionRelativeToPlayer(enemy.GlobalPosition).Rotated(Mathf.DegToRad(90f)).Normalized(), currentMeleeWeapon.frogBaseKnockBack);
+				}
+				
 			}
 		}
 		
+		SwingMeleeSprite(currentMeleeWeapon);
 		SetFiringDelay(currentMeleeWeapon.frogSwingEndLag);
+		
+		_upswing = !_upswing;
+	}
+	
+	private void KnockBackEnemy(EnemyBase enemyToHit, Vector2 hitDirection, float knockBackStrength){
+		GD.Print("KnockBack Direction " + hitDirection + " Force " + knockBackStrength);
+		enemyToHit.EnemyApplyKnockBack(hitDirection, PlayerData.Instance.CalculateKnockBack(knockBackStrength));
+	}
+	
+	private void SwingMeleeSprite(FrogWeaponMelee currentMeleeWeapon){
+		MeleeWeaponSprite.Rotation *= -1;
 	}
 	
 	public void BodyEnteredMeleeArea(Node2D otherBody){

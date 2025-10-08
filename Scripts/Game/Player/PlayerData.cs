@@ -221,6 +221,12 @@ public class PlayerData
 		return baseDamage;
 	}
 	
+	public float CalculateKnockBack(float baseKnockback){
+		//this will apply modifiers to the damage passed in
+		GD.Print("KnockBack Calcs not implemented yet");
+		return baseKnockback;
+	}
+	
 	public delegate void PlayerTriggerEvents();
 	public static event PlayerTriggerEvents playerHitEnemy;
 	public static event PlayerTriggerEvents playerKillEnemy;

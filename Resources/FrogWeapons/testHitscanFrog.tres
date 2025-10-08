@@ -11,6 +11,7 @@ frogBaseDamage = 1.0
 frogHitScanRange = 50.0
 frogHitScanLineWidth = 1.0
 frogHitScanPierceCount = 1
+frogBaseKnockBack = 1600.0
 frogName = "Hitscan Frog"
 frogId = "hitscanFrog"
 frogMaxAmmo = 5

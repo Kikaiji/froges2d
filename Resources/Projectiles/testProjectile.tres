@@ -15,3 +15,4 @@ projectileCollisionShape = SubResource("CircleShape2D_5ukeo")
 projectileSprite = ExtResource("1_47tpy")
 projectileLifeTime = 10.0
 projectileBounceCount = 3
+projectileBaseKnockBack = 800.0

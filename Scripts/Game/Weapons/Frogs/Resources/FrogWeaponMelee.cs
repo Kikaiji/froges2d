@@ -11,4 +11,5 @@ public partial class FrogWeaponMelee : FrogWeapon
 	[Export] public float frogSwingSize;
 	[Export] public float frogSwingAngle;
 	[Export] public float frogSwingSprite;
+	[Export] public float frogBaseKnockBack;
 }

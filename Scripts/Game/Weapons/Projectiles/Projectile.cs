@@ -12,4 +12,5 @@ public partial class Projectile : Resource
 	[Export] public float projectileLifeTime;
 	
 	[Export] public int projectileBounceCount;
+	[Export] public float projectileBaseKnockBack;
 }

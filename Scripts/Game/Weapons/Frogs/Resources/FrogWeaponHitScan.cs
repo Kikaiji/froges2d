@@ -9,4 +9,5 @@ public partial class FrogWeaponHitScan : FrogWeapon
 	[Export] public Texture2D frogHitScanLineSprite;
 	[Export] public float frogHitScanLineWidth;
 	[Export] public int frogHitScanPierceCount;
+	[Export] public float frogBaseKnockBack;
 }
