@@ -13,6 +13,8 @@ public partial class PlayerController : CharacterBody2D
 	[Export]
 	private double _accelerationSpeed = 200;
 	
+	private float _knockBackMultiplier = 1f;
+	
 	private Vector2 _previousMoveInput = Vector2.Zero;
 	public Vector2 TrueMovementDir = Vector2.Zero;
 	private Vector2 _lastDirectionFaced;
@@ -106,4 +108,9 @@ public partial class PlayerController : CharacterBody2D
 	public Vector2 GetPositionRelativeToPlayer(Vector2 globalPos){
 		return globalPos - this.GlobalPosition;
 	}
+	
+	public void ApplyKnockBack(Vector2 dir, float strength){
+		Velocity += dir * strength * _knockBackMultiplier;
+	}
+	
 }

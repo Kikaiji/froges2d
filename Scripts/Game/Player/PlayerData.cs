@@ -227,6 +227,78 @@ public class PlayerData
 		return baseKnockback;
 	}
 	
+	
+	private ItemBase[] _playerItems = new ItemBase[10];
+	public ItemBase[] PlayerItems => _playerItems;
+	
+	public delegate void ItemSlotUpdate(int slotIndex);
+	public static event ItemSlotUpdate itemSlotUpdated;
+	
+	private void SlotUpdated(int slotIndex){
+		if(itemSlotUpdated != null){
+			itemSlotUpdated.Invoke(slotIndex);
+		}
+	}
+	
+	public bool AddItem(ItemBase newItem){
+		int index = Array.FindIndex(_playerItems, null);
+		
+		if(index == -1){
+			return false;
+		}
+		
+		_playerItems[index] = newItem;
+		_playerItems[index].Connect();
+		
+		PlayerJustObtainedItem();
+		SlotUpdated(index);
+		
+		return true;
+	}
+	
+	public bool RemoveItem(int itemSlot){
+		if(itemSlot < 0 || itemSlot >= _playerItems.Length || _playerItems[itemSlot] == null){
+			return false;
+		}
+		
+		_playerItems[itemSlot].Disconnect();
+		_playerItems[itemSlot] = null;
+		
+		SlotUpdated(itemSlot);
+		
+		return true;
+	}
+	
+	public bool ReplaceItem(ItemBase newItem, int itemSlot){
+		if(itemSlot < 0 || itemSlot >= _playerItems.Length || newItem == null){
+			return false;
+		}
+		
+		if(_playerItems[itemSlot] != null){
+			_playerItems[itemSlot].Disconnect();
+		}
+		
+		_playerItems[itemSlot] = newItem;
+		_playerItems[itemSlot].Connect();
+		
+		PlayerJustObtainedItem();
+		SlotUpdated(itemSlot);
+		
+		return true;
+	}
+	
+	public bool SwapItems(int firstSlot, int secondSlot){
+		if(firstSlot < 0 || firstSlot >= _playerItems.Length ||
+			secondSlot < 0 || secondSlot >= _playerItems.Length){
+				return false;
+			}
+			
+		(_playerItems[firstSlot], _playerItems[secondSlot]) = (_playerItems[secondSlot], _playerItems[firstSlot]);
+		SlotUpdated(firstSlot);
+		SlotUpdated(secondSlot);
+		return true;
+	}
+	
 	public delegate void PlayerTriggerEvents();
 	public static event PlayerTriggerEvents playerHitEnemy;
 	public static event PlayerTriggerEvents playerKillEnemy;
@@ -251,6 +323,10 @@ public class PlayerData
 	public void PlayerJustPlacedTurret() => playerTurretPlaced?.Invoke();
 	public void PlayerJustRemovedTurret() => playerTurretRemoved?.Invoke();
 	public void PlayerTurretJustKilled() => playerTurretKilled?.Invoke();
+	
+	public static event PlayerTriggerEvents playerItemObtained;
+	
+	public void PlayerJustObtainedItem() => playerItemObtained?.Invoke();
 	
 	
 	

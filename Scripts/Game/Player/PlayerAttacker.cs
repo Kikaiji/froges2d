@@ -165,7 +165,7 @@ public partial class PlayerAttacker : Node2D
 			MeleeWeaponSprite.Offset = new Vector2(5f + (newFrog.frogHoldSprite.GetWidth() / 2), 0f);
 			var newMeleeFrog = newFrog as FrogWeaponMelee;
 			MeleeWeaponSprite.Rotation = Mathf.DegToRad(newMeleeFrog.frogSwingAngle / 2);
-			
+			_upswing = true;
 			WeaponSprite.Texture = null;
 			return;
 		} else {
@@ -215,6 +215,12 @@ public partial class PlayerAttacker : Node2D
 		
 		SetFiringDelay(currentHitScanWeapon.frogBaseFireRate);
 		
+		PlayerBody.ApplyKnockBack(PlayerBody.MousePosRelativeToPlayer.Normalized() * -1f, currentHitScanWeapon.frogBaseKnockBack * 0.04f);
+		if(PlayerData.Instance.MainCurrentAmmo <= 0){
+			SetFiringDelay(currentHitScanWeapon.frogReloadSpeed);
+			PlayerData.Instance.ReloadMainWeapon();
+		}
+		
 		var hitScanLine = HitScanLine.Instantiate() as HitScanLine;
 		GetTree().GetCurrentScene().AddChild(hitScanLine);
 		hitScanLine.GlobalPosition = PlayerBody.GlobalPosition + (PlayerBody.MousePosRelativeToPlayer.Normalized() * currentHitScanWeapon.frogBarrelDistance);
@@ -247,7 +253,6 @@ public partial class PlayerAttacker : Node2D
 		if(hitCollisionObject.GetCollisionLayerValue(3)){
 			PlayerData.Instance.PlayerJustHitEnvironment();
 			GD.Print("hit the environment " + hitCollisionObject.Name);
-			return;
 		}
 		
 		//Layer 2 = Enemy
@@ -261,13 +266,6 @@ public partial class PlayerAttacker : Node2D
 			PlayerData.Instance.PlayerJustHitEnemy();
 			GD.Print("hit an enemy " + hitCollisionObject.Name);
 		}
-		
-		if(PlayerData.Instance.MainCurrentAmmo <= 0){
-			SetFiringDelay(currentHitScanWeapon.frogReloadSpeed);
-			PlayerData.Instance.ReloadMainWeapon();
-		}
-		
-		
 	}
 	
 	private void ProjectileWeaponAttack(FrogWeaponProjectile currentProjectileWeapon, Vector2 mouseGlobalPosition){
@@ -282,6 +280,9 @@ public partial class PlayerAttacker : Node2D
 			SetFiringDelay(currentProjectileWeapon.frogReloadSpeed);
 			PlayerData.Instance.ReloadMainWeapon();
 		}
+		
+		
+		PlayerBody.ApplyKnockBack(PlayerBody.MousePosRelativeToPlayer.Normalized() * -1f, currentProjectileWeapon.frogWeaponProjectile.projectileBaseKnockBack * 0.04f);
 	}
 	
 	private void TurretWeaponAttack(FrogWeaponTurret currentTurretWeapon, Vector2 mouseGlobalPosition){

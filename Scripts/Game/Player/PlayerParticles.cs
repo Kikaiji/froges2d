@@ -97,7 +97,7 @@ public partial class PlayerParticles : Node2D
 		
 		_playerFacingX = MathF.Sign(PlayerBody.TrueMovementDir.X);
 		
-		BigDustCloud.Emitting = true;
+		BigDustCloud.Restart();
 		_smallCloudEmitTimer = SmallCloudStartDelay;
 		_smallCloudEmit = true;		
 		
